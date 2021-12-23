@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="793.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17">
+  <tabs>
+      <Tab text="Danh sách từ lóng">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        </content>
+      </Tab>
+    <Tab text="Tìm Kiếm">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TextField layoutX="65.0" layoutY="66.0" prefHeight="25.0" prefWidth="151.0" />
+                  <Button layoutX="233.0" layoutY="66.0" mnemonicParsing="false" text="Button" />
+                  <Text layoutX="113.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tìm slang word" wrappingWidth="95.13671875" />
+                  <TextField layoutX="439.0" layoutY="79.0" prefHeight="25.0" prefWidth="151.0" />
+                  <Button layoutX="607.0" layoutY="79.0" mnemonicParsing="false" text="Button" />
+                  <Text layoutX="467.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Định nghĩa" wrappingWidth="95.13671875" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
+    <Tab text="Lịch Sử">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+      </content>
+    </Tab>
+      <Tab text="Từ lóng mỗi ngày">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+         </content>
+      </Tab>
+      <Tab text="Nhìn từ đoán nghĩa">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+         </content>
+      </Tab>
+      <Tab text="Nhìn nghĩ đoán từ">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+         </content>
+      </Tab>
+  </tabs>
+</TabPane>
