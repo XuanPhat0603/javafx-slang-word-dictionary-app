@@ -16,17 +16,13 @@ public class slangWord {
         return word;
     }
 
-//    public ArrayList<String> getMeaning(){
-//        return meaning;
-//    }
+    public String getMeaning() {
+        return meaning;
+    }
 
     public void setWord(String word){
         this.word = word;
     }
-
-//    public void setMeaning(ArrayList<String> meaning){
-//        this.meaning = meaning;
-//    }
 
     public String toString(){
         String result = "";
@@ -35,12 +31,5 @@ public class slangWord {
         return result;
     }
 
-//    public void addMeaning(String meaning){
-//        this.meaning.add(meaning);
-//    }
-
-//    public void removeMeaning(String meaning){
-//        this.meaning.remove(meaning);
-//    }
 
 }
