@@ -431,6 +431,7 @@ AMV`Anime Music Video
 AMW`America's Most Wanted (TV show)
 AMZ`Amazing
 ANC`African National Congress
+ANC`African National Congress
 ANF`Abercrombie & Fitch
 ANFAWFOS`And Now For A Word From Our Sponsor
 ANFSCD`And Now For Something Completely Different

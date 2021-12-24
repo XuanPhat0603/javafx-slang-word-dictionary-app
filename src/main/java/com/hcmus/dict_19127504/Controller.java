@@ -88,13 +88,20 @@ public class Controller implements Initializable {
         String definition = definitionInput.getText();
         listSearch.clear();
         HashMap<String, ArrayList<String>> list = wordList.findDefinition(definition);
-        if (list != null) {
-            for (String word : list.keySet()) {
-                for (String meaning : list.get(word)) {
-                    listSearch.add(new slangWord(word, meaning));
+        int count = 0;
+        if (list.size() == 0) {
+            listSearch.add(new slangWord("Không tìm thấy từ", "Không tìm thấy từ"));
+
+        }
+        else {
+            for (String key : list.keySet()) {
+                for (String meaning : list.get(key)) {
+                    listSearch.add(new slangWord(meaning, key));
+                    count++;
                 }
             }
         }
+        System.out.println(count);
         findSlangWordTableView.setItems(listSearch);
         long endTime = System.currentTimeMillis();
         System.out.println("Time: " + (endTime - startTime) + "ms");

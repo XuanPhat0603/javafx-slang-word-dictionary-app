@@ -42,14 +42,10 @@ public class slangWordList {
                         words2 = words[1].split("\\|");
                         for (String word : words2) {
                             this.forwardMap.get(words[0]).add(word.trim());
-                            this.backwardMap.put(word.trim(), new ArrayList<>());
-                            this.backwardMap.get(word.trim()).add(words[0]);
                         }
                     }
                     else {
                         this.forwardMap.get(words[0]).add(words[1].trim());
-                        this.backwardMap.put(words[1].trim(), new ArrayList<>());
-                        this.backwardMap.get(words[1].trim()).add(words[0]);
                     }
                 }
             }
@@ -130,6 +126,17 @@ public class slangWordList {
         File file = new File("slang_hashmap.txt");
         if (!file.exists()) {
             readData();
+            for (String key : this.forwardMap.keySet()) {
+                ArrayList<String> list = this.forwardMap.get(key);
+                for (String word : list) {
+                    if (this.backwardMap.get(word) == null) {
+
+                        this.backwardMap.put(word, new ArrayList<>());
+
+                    }
+                    this.backwardMap.get(word).add(key);
+                }
+            }
             saveHashMap();
         }
         else {
@@ -163,6 +170,7 @@ public class slangWordList {
 //            System.out.println(key + ": " + this.forwardMap.get(key));
 //        }
 
+        // print all slang words
         for (String key : this.backwardMap.keySet()) {
             System.out.println(key + ": " + this.backwardMap.get(key));
         }
@@ -173,17 +181,13 @@ public class slangWordList {
         // find slangword contain definition from backwardMap
 
         HashMap<String, ArrayList<String>> map = new HashMap<>();
-        int count = 0;
         for (String key : this.backwardMap.keySet()) {
             if (key.toLowerCase(Locale.ROOT).contains(definition.toLowerCase(Locale.ROOT))) {
                 map.put(key, this.backwardMap.get(key));
                 //System.out.println(key + ": " + this.backwardMap.get(key));
-
-                count++;
             }
         }
 
-        System.out.println(count + " results found!");
         return map;
     }
 }
