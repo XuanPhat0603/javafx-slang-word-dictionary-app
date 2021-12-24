@@ -3,14 +3,17 @@ package com.hcmus.dict_19127504;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class slangWordList {
     private static slangWordList instanceSlangWord = null;
-    private HashMap<String, ArrayList<String>> slangWord;
+    private HashMap<String, ArrayList<String>> forwardMap;
+    private HashMap<String, ArrayList<String>> backwardMap;
 
     private slangWordList() throws FileNotFoundException {
-        this.slangWord = new HashMap<>();
+        this.forwardMap = new HashMap<>();
+        this.backwardMap = new HashMap<>();
         this.start();
     }
 
@@ -34,32 +37,47 @@ public class slangWordList {
                 String[] words2;
                 if (words.length == 2) {
                     words[0] = words[0].trim();
-                    this.slangWord.put(words[0], new ArrayList<>());
+                    this.forwardMap.put(words[0], new ArrayList<>());
                     if (words[1].contains("|")) {
                         words2 = words[1].split("\\|");
                         for (String word : words2) {
-                            this.slangWord.get(words[0]).add(word.trim());
+                            this.forwardMap.get(words[0]).add(word.trim());
+                            this.backwardMap.put(word.trim(), new ArrayList<>());
+                            this.backwardMap.get(word.trim()).add(words[0]);
                         }
                     }
                     else {
-                        this.slangWord.get(words[0]).add(words[1]);
+                        this.forwardMap.get(words[0]).add(words[1].trim());
+                        this.backwardMap.put(words[1].trim(), new ArrayList<>());
+                        this.backwardMap.get(words[1].trim()).add(words[0]);
                     }
                 }
             }
         }
     }
 
-    public void findSlangWord(String word) {
-        ArrayList<String> list = this.slangWord.get(word);
-        if (list != null) {
-            System.out.println("Slang word: " + list.toString());
-        } else {
+    public ArrayList<String> findSlangWord(String word) {
+        ArrayList<String> list = this.forwardMap.get(word);
+        if (list == null) {
+            return null;
+        }
+        return list;
+    }
+
+    public void findDefine(String word) {
+        // get arrayList of slangWord
+        ArrayList<String> list = this.forwardMap.get(word);
+        if (list == null) {
             System.out.println("Not found!");
+        } else {
+            for (String word2 : list) {
+                System.out.println(word2);
+            }
         }
     }
 
     public HashMap<String, ArrayList<String>> getList() {
-        return this.slangWord;
+        return this.forwardMap;
     }
 
     // save hashMap to file (slang_hashmap.txt)
@@ -76,7 +94,8 @@ public class slangWordList {
             // save hashMap to file
             FileOutputStream fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(this.slangWord);
+            oos.writeObject(this.forwardMap);
+            oos.writeObject(this.backwardMap);
             oos.close();
             fos.close();
         } catch (Exception e) {
@@ -95,15 +114,13 @@ public class slangWordList {
             }
         }
         try {
-            long startTime = System.currentTimeMillis();
             // load hashMap from file
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            this.slangWord = (HashMap<String, ArrayList<String>>) ois.readObject();
+            this.forwardMap = (HashMap<String, ArrayList<String>>) ois.readObject();
+            this.backwardMap = (HashMap<String, ArrayList<String>>) ois.readObject();
             ois.close();
             fis.close();
-            long endTime = System.currentTimeMillis();
-            System.out.println("Execution time: " + (endTime - startTime) + "ms");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,8 +130,13 @@ public class slangWordList {
         File file = new File("slang_hashmap.txt");
         if (!file.exists()) {
             readData();
-        } else
+            saveHashMap();
+        }
+        else {
+            System.out.println("HashMap already exists!");
             loadHashMap();
+            print();
+        }
     }
 
     public void saveHistory(String word) {
@@ -135,5 +157,33 @@ public class slangWordList {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public void print() {
+//        for (String key : this.forwardMap.keySet()) {
+//            System.out.println(key + ": " + this.forwardMap.get(key));
+//        }
+
+        for (String key : this.backwardMap.keySet()) {
+            System.out.println(key + ": " + this.backwardMap.get(key));
+        }
+
+    }
+
+    public HashMap<String, ArrayList<String>> findDefinition(String definition) {
+        // find slangword contain definition from backwardMap
+
+        HashMap<String, ArrayList<String>> map = new HashMap<>();
+        int count = 0;
+        for (String key : this.backwardMap.keySet()) {
+            if (key.toLowerCase(Locale.ROOT).contains(definition.toLowerCase(Locale.ROOT))) {
+                map.put(key, this.backwardMap.get(key));
+                //System.out.println(key + ": " + this.backwardMap.get(key));
+
+                count++;
+            }
+        }
+
+        System.out.println(count + " results found!");
+        return map;
     }
 }

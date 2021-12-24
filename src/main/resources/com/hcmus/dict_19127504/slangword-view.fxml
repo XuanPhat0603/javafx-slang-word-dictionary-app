@@ -37,30 +37,27 @@
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TextField fx:id="search" layoutX="65.0" layoutY="66.0" prefHeight="25.0" prefWidth="151.0">
+                  <Text layoutX="66.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tìm kiếm theo Slang Word" wrappingWidth="235.13671875">
                      <font>
-                        <Font size="14.0" />
-                     </font>
-                  </TextField>
-                  <Button fx:id="searchSlangWord" layoutX="233.0" layoutY="66.0" mnemonicParsing="false" text="Search">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
-                  <Text layoutX="113.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Slang Word" wrappingWidth="95.13671875">
-                     <font>
-                        <Font size="14.0" />
+                        <Font size="20.0" />
                      </font>
                   </Text>
-                  <TextField layoutX="439.0" layoutY="79.0" prefHeight="25.0" prefWidth="151.0" />
-                  <Button layoutX="607.0" layoutY="79.0" mnemonicParsing="false" text="Button" />
+                  <TextField fx:id="definitionInput" layoutX="623.0" layoutY="69.0" prefHeight="25.0" prefWidth="263.0" />
+                  <Button fx:id="meaningSeachBtn" layoutX="907.0" layoutY="69.0" mnemonicParsing="false" text="Search" />
                   <Text layoutX="467.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="95.13671875" />
-                  <TableView layoutX="65.0" layoutY="121.0" prefHeight="293.0" prefWidth="650.0">
+                  <TableView fx:id="findSlangWordTableView" layoutX="32.0" layoutY="120.0" prefHeight="408.0" prefWidth="1149.0" AnchorPane.bottomAnchor="144.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="120.0">
                     <columns>
-                      <TableColumn prefWidth="86.0" text="C1" />
-                      <TableColumn prefWidth="64.0" text="C2" />
+                      <TableColumn fx:id="wordColumnFind" prefWidth="143.0" text="Từ lóng" />
+                      <TableColumn fx:id="meaningColumnFind" prefWidth="1006.0" text="Nghĩa" />
                     </columns>
                   </TableView>
+                  <Text layoutX="623.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tìm kiếm theo definition" wrappingWidth="228.13671875">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="slangWordInput" layoutX="66.0" layoutY="69.0" prefHeight="25.0" prefWidth="263.0" />
+                  <Button fx:id="searchSlangWordBtn" layoutX="350.0" layoutY="69.0" mnemonicParsing="false" text="Search" />
                </children></AnchorPane>
       </content>
     </Tab>

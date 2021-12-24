@@ -18,7 +18,6 @@ public class slangWord {
         return meaning;
     }
 
-
     public String toString(){
         String result = "";
         result += "Word: " + word + "\n";
