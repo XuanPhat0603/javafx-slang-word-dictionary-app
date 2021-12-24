@@ -13,6 +13,7 @@ public class Application extends javafx.application.Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Dictionary");
         stage.setScene(scene);
+        stage.getIcons().add(new javafx.scene.image.Image(Application.class.getResourceAsStream("/icons/icon.png")));
         stage.show();
     }
 

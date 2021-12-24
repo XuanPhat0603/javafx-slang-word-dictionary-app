@@ -10,6 +10,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -30,18 +31,25 @@ public class Controller implements Initializable {
     @FXML
     private TableView<slangWord> listSlangWord;
 
-    private ObservableList<slangWord> list;
+    private ObservableList<slangWord> list = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        list = FXCollections.observableArrayList(
-                new slangWord("hello", "lô lô"),
-                new slangWord("goodbye", "Tạm biệt"),
-                new slangWord("thank you", "Cảm ơn")
-        );
-        wordColumn.setCellValueFactory(new PropertyValueFactory<slangWord, String>("word"));
-        meaningColumn.setCellValueFactory(new PropertyValueFactory<slangWord, String>("meaning"));
+        try {
+            addSlangWord();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        wordColumn.setCellValueFactory(new PropertyValueFactory<>("word"));
+        meaningColumn.setCellValueFactory(new PropertyValueFactory<>("meaning"));
         listSlangWord.setItems(list);
     }
 
+    void addSlangWord() throws FileNotFoundException {
+        for (String key : slangWordList.getInstance().getList().keySet()) {
+            for (String meaning : slangWordList.getInstance().getList().get(key)) {
+                list.add(new slangWord(key, meaning));
+            }
+        }
+    }
 }

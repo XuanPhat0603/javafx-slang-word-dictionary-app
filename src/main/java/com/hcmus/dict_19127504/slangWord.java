@@ -1,7 +1,5 @@
 package com.hcmus.dict_19127504;
 
-import java.util.ArrayList;
-
 public class slangWord {
     private String word;
     private String meaning;
@@ -20,9 +18,6 @@ public class slangWord {
         return meaning;
     }
 
-    public void setWord(String word){
-        this.word = word;
-    }
 
     public String toString(){
         String result = "";
@@ -30,6 +25,4 @@ public class slangWord {
         result += "Meaning: " + meaning.toString() + "\n";
         return result;
     }
-
-
 }
