@@ -9,17 +9,38 @@ public class slangWordList {
     private HashMap<String, ArrayList<String>> map;
     private HashMap<String, ArrayList<String>> historyMap;
 
+    // constructor
     private slangWordList() throws FileNotFoundException {
         this.map = new HashMap<>();
         historyMap = new HashMap<>();
         this.start();
     }
 
+    // singleton
     public static slangWordList getInstance() throws FileNotFoundException {
         if (instanceSlangWord == null)
             instanceSlangWord = new slangWordList();
 
         return instanceSlangWord;
+    }
+
+    public void start() throws FileNotFoundException {
+        File file = new File("slang_hashmap.txt");
+        File historyFile = new File("slang_history.txt");
+        if (!file.exists()) {
+            readData();
+            saveHashMap();
+        }
+        else {
+            loadHashMap();
+        }
+       if (historyFile.exists()) {
+           loadHistory();
+       }
+    }
+    // activity with slangWordList
+    public HashMap<String, ArrayList<String>> getList() {
+        return this.map;
     }
 
     public void setMeaningDuplicate(String word, String meaning) {
@@ -39,18 +60,6 @@ public class slangWordList {
         meaningList.add(meaning);
         this.map.put(word, meaningList);
         saveHashMap();
-    }
-
-    public void start() throws FileNotFoundException {
-        File file = new File("slang_hashmap.txt");
-        if (!file.exists()) {
-            readData();
-            saveHashMap();
-        }
-        else {
-            loadHashMap();
-        }
-        loadHistory();
     }
 
     public void readData() throws FileNotFoundException {
@@ -129,9 +138,9 @@ public class slangWordList {
 
         return list;
     }
-
-    public HashMap<String, ArrayList<String>> getList() {
-        return this.map;
+    // history
+    public HashMap<String, ArrayList<String>> getHistory() {
+        return this.historyMap;
     }
 
     public void addHistory(String word, String time) {

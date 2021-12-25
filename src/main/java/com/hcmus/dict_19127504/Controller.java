@@ -63,8 +63,18 @@ public class Controller implements Initializable {
     @FXML
     private Button resetBtn;
 
+    @FXML
+    private TableView<history> listHistoryTableView;
+
+    @FXML
+    private TableColumn<history, String> timeHistoryColumn;
+
+    @FXML
+    private TableColumn<history, String> wordHistoryColumn;
+
     private ObservableList<slangWord> list = FXCollections.observableArrayList();
     private ObservableList<slangWord> listSearch = FXCollections.observableArrayList();
+    private ObservableList<history> listHistory = FXCollections.observableArrayList();
 
     public Controller() throws FileNotFoundException {
     }
@@ -83,6 +93,7 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
+        editBtn.setOnAction(event -> onClickEditBtn());
         findSlangWordTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             slangWord selectedItem =  findSlangWordTableView.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
@@ -90,9 +101,8 @@ public class Controller implements Initializable {
                 meaningInput.setText(selectedItem.getMeaning());
             }
         });
-        editBtn.setOnAction(event -> onClickEditBtn());
-
         addSlangWordToTableView();
+        addHistoryToTableView();
     }
 
     private void onClickResetBtn() throws FileNotFoundException {
@@ -228,6 +238,7 @@ public class Controller implements Initializable {
         }
         findSlangWordTableView.setItems(listSearch);
         wordListInstance.addHistory(word.toUpperCase(Locale.ROOT), dtf.format(now));
+        addHistoryToTableView();
     }
 
     private void onClickDefinitionSearchBtn() {
@@ -258,5 +269,17 @@ public class Controller implements Initializable {
             for (String meaning : wordListInstance.getList().get(key))
                 list.add(new slangWord(key, meaning));
         listSlangWord.setItems(list);
+    }
+
+    private void addHistoryToTableView() {
+        wordHistoryColumn.setCellValueFactory(new PropertyValueFactory<>("word"));
+        timeHistoryColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
+        listHistory.clear();
+        if (wordListInstance.getHistory().size() > 0) {
+            for (String key : wordListInstance.getHistory().keySet())
+                for (String time : wordListInstance.getHistory().get(key))
+                    listHistory.add(new history(key, time));
+            listHistoryTableView.setItems(listHistory);
+        }
     }
 }

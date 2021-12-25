@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="1031.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hcmus.dict_19127504.Controller">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="704.0" prefWidth="878.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hcmus.dict_19127504.Controller">
   <tabs>
       <Tab text="Danh sách từ lóng">
         <content>
@@ -46,7 +46,7 @@
                   <TableView fx:id="findSlangWordTableView" layoutX="55.0" layoutY="165.0" prefHeight="497.0" prefWidth="1007.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="165.0">
                     <columns>
                       <TableColumn fx:id="wordColumnFind" prefWidth="218.0" resizable="false" sortable="false" text="Từ lóng" />
-                      <TableColumn fx:id="meaningColumnFind" prefWidth="768.0" resizable="false" sortable="false" text="Nghĩa" />
+                      <TableColumn fx:id="meaningColumnFind" prefWidth="626.0" resizable="false" sortable="false" text="Nghĩa" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -110,10 +110,10 @@
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TableView fx:id="listSlangWord1" prefHeight="670.0" prefWidth="1023.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+                  <TableView fx:id="listHistoryTableView" layoutX="17.0" layoutY="28.0" prefHeight="648.0" prefWidth="997.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                      <columns>
-                        <TableColumn fx:id="wordColumn1" editable="false" prefWidth="197.0" resizable="false" sortable="false" text="Từ lóng" />
-                        <TableColumn fx:id="meaningColumn1" editable="false" prefWidth="641.0" resizable="false" sortable="false" text="Nghĩa" />
+                        <TableColumn fx:id="wordHistoryColumn" editable="false" prefWidth="195.0" resizable="false" sortable="false" text="Từ lóng" />
+                        <TableColumn fx:id="timeHistoryColumn" editable="false" maxWidth="797.0" prefWidth="645.0" resizable="false" sortable="false" text="Thời gian" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
