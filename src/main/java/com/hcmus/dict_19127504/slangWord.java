@@ -22,6 +22,7 @@ public class slangWord {
         String result = "";
         result += "Word: " + word + "\n";
         result += "Meaning: " + meaning.toString() + "\n";
+
         return result;
     }
 }
