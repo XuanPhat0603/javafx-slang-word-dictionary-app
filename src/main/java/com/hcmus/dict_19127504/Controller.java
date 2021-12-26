@@ -1,6 +1,5 @@
 package com.hcmus.dict_19127504;
 
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -174,7 +173,6 @@ public class Controller implements Initializable {
         quizDefinitionLabel.setWrapText(true);
         quizDefinitionLabel.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 45));
         // random answer
-        int answer = random.nextInt(4);
         ArrayList<String> listAnswer = new ArrayList<>();
         listAnswer.add(slangWord.getWord());
         int i = 0;
