@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -81,6 +82,26 @@ public class Controller implements Initializable {
     @FXML
     private Button random1SlangWordBtn;
 
+    @FXML
+    private Label quizSlangWordLabel;
+
+    @FXML
+    private Button quizSlangWordRefreshBtn;
+
+    @FXML
+    private Button ABtn;
+
+    @FXML
+    private Button BBtn;
+
+    @FXML
+    private Button CBtn;
+
+    @FXML
+    private Button DBtn;
+
+
+
     private ObservableList<slangWord> list = FXCollections.observableArrayList();
     private ObservableList<slangWord> listSearch = FXCollections.observableArrayList();
     private ObservableList<history> listHistory = FXCollections.observableArrayList();
@@ -104,6 +125,7 @@ public class Controller implements Initializable {
         });
         editBtn.setOnAction(event -> onClickEditBtn());
         random1SlangWordBtn.setOnAction(event -> onClickRandom1SlangWordBtn());
+        quizSlangWordRefreshBtn.setOnAction(event -> onClickQuizSlangWordRefreshBtn());
         findSlangWordTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             slangWord selectedItem =  findSlangWordTableView.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
@@ -114,6 +136,11 @@ public class Controller implements Initializable {
         addSlangWordToTableView();
         addHistoryToTableView();
         random1SlangWord();
+        quizSlangWord();
+    }
+
+    private void onClickQuizSlangWordRefreshBtn() {
+        quizSlangWord();
     }
 
     private void onClickRandom1SlangWordBtn() {
@@ -303,5 +330,78 @@ public class Controller implements Initializable {
             listHistoryTableView.setItems(listHistory);
             }
         }
+    }
+
+    private void quizSlangWord() {
+        resetBtn();
+        ArrayList<String> listAnswer = new ArrayList<>();
+        int size = wordListInstance.getList().size();
+        int random = (int) (Math.random() * size);
+        int random2 = (int) (Math.random() * wordListInstance.getList().get(wordListInstance.getList().keySet().toArray()[random]).size());
+        String word = wordListInstance.getList().keySet().toArray()[random].toString();
+        String meaning = wordListInstance.getList().get(wordListInstance.getList().keySet().toArray()[random]).get(random2);
+        quizSlangWordLabel.setText(word);
+        listAnswer.add(meaning);
+        for (int i = 0; i < 3; i++) {
+            int random3 = (int) (Math.random() * size);
+            int random4 = (int) (Math.random() * wordListInstance.getList().get(wordListInstance.getList().keySet().toArray()[random3]).size());
+            String word2 = wordListInstance.getList().keySet().toArray()[random3].toString();
+            String meaning2 = wordListInstance.getList().get(wordListInstance.getList().keySet().toArray()[random3]).get(random4);
+            if (!meaning2.equals(meaning))
+                listAnswer.add(meaning2);
+        }
+        Collections.shuffle(listAnswer);
+        ABtn.setText(listAnswer.get(0));
+        BBtn.setText(listAnswer.get(1));
+        CBtn.setText(listAnswer.get(2));
+        DBtn.setText(listAnswer.get(3));
+
+        chooseAnswer(ABtn, BBtn, CBtn, DBtn, meaning);
+        chooseAnswer(BBtn, ABtn, CBtn, DBtn, meaning);
+        chooseAnswer(CBtn, ABtn, BBtn, DBtn, meaning);
+        chooseAnswer(DBtn, ABtn, BBtn, CBtn, meaning);
+    }
+
+    private void chooseAnswer(Button ABtn, Button BBtn, Button CBtn, Button DBtn, String answer) {
+        ABtn.setOnAction(e -> {
+            BBtn.setDisable(true);
+            CBtn.setDisable(true);
+            DBtn.setDisable(true);
+            if (ABtn.getText().equals(answer)) {
+                ABtn.setStyle("-fx-background-color: #4BD62F");
+            }
+            else {
+                // set button is answer
+                if (BBtn.getText().equals(answer)) {
+                    BBtn.setStyle("-fx-background-color: #4BD62F");
+                    BBtn.setDisable(false);
+                }
+                else if (CBtn.getText().equals(answer)) {
+                    CBtn.setStyle("-fx-background-color: #4BD62F");
+                    CBtn.setDisable(false);
+                }
+                else if (DBtn.getText().equals(answer)) {
+                    DBtn.setStyle("-fx-background-color: #4BD62F");
+                    DBtn.setDisable(false);
+                }
+                ABtn.setStyle("-fx-background-color: #ff0000");
+                ABtn.setTextFill(Color.WHITE);
+            }
+        });
+    }
+
+    private void resetBtn() {
+        ABtn.setTextFill(Color.BLACK);
+        BBtn.setTextFill(Color.BLACK);
+        CBtn.setTextFill(Color.BLACK);
+        DBtn.setTextFill(Color.BLACK);
+        ABtn.setDisable(false);
+        BBtn.setDisable(false);
+        CBtn.setDisable(false);
+        DBtn.setDisable(false);
+        ABtn.setStyle("-fx-background-color: #ffffff");
+        BBtn.setStyle("-fx-background-color: #ffffff");
+        CBtn.setStyle("-fx-background-color: #ffffff");
+        DBtn.setStyle("-fx-background-color: #ffffff");
     }
 }
