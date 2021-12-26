@@ -276,10 +276,10 @@ public class Controller implements Initializable {
         timeHistoryColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
         listHistory.clear();
         if (wordListInstance.getHistory().size() > 0) {
-            for (String key : wordListInstance.getHistory().keySet())
-                for (String time : wordListInstance.getHistory().get(key))
-                    listHistory.add(new history(key, time));
+            for (int i = wordListInstance.getHistory().size() - 1; i >= 0; i--) {
+                listHistory.add(new history(wordListInstance.getHistory().get(i).getWord(), wordListInstance.getHistory().get(i).getTime()));
             listHistoryTableView.setItems(listHistory);
+            }
         }
     }
 }

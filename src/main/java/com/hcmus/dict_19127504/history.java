@@ -1,6 +1,8 @@
 package com.hcmus.dict_19127504;
 
-public class history {
+import java.io.Serializable;
+
+public class history implements Serializable {
     private String word;
     private String time;
 

@@ -7,12 +7,12 @@ public class slangWordList {
 
     private static slangWordList instanceSlangWord = null;
     private HashMap<String, ArrayList<String>> map;
-    private HashMap<String, ArrayList<String>> historyMap;
+    private ArrayList<history> historyList;
 
     // constructor
     private slangWordList() throws FileNotFoundException {
         this.map = new HashMap<>();
-        historyMap = new HashMap<>();
+        historyList = new ArrayList<>();
         this.start();
     }
 
@@ -25,8 +25,8 @@ public class slangWordList {
     }
 
     public void start() throws FileNotFoundException {
-        File file = new File("slang_hashmap.txt");
-        File historyFile = new File("slang_history.txt");
+        File file = new File("slang_hashmap.dat");
+        File historyFile = new File("slang_history.dat");
         if (!file.exists()) {
             readData();
             saveHashMap();
@@ -90,7 +90,7 @@ public class slangWordList {
     }
 
     public void saveHashMap() {
-        File file = new File("slang_hashmap.txt");
+        File file = new File("slang_hashmap.dat");
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -111,7 +111,7 @@ public class slangWordList {
     }
 
     public void loadHashMap() {
-        File file = new File("slang_hashmap.txt");
+        File file = new File("slang_hashmap.dat");
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -139,22 +139,18 @@ public class slangWordList {
         return list;
     }
     // history
-    public HashMap<String, ArrayList<String>> getHistory() {
-        return this.historyMap;
+    public ArrayList<history> getHistory() {
+        return this.historyList;
     }
 
     public void addHistory(String word, String time) {
-        ArrayList<String> list = this.historyMap.get(word);
-        if (list == null)
-            list = new ArrayList<>();
-        list.add(time);
-        this.historyMap.put(word, list);
+        this.historyList.add(new history(word, time));
         saveHistory();
     }
 
     public void saveHistory() {
         // save to file (slang_history.txt)
-        File file = new File("slang_history.txt");
+        File file = new File("slang_history.dat");
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -166,7 +162,7 @@ public class slangWordList {
             // save hashMap to file
             FileOutputStream fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(this.historyMap);
+            oos.writeObject(this.historyList);
             oos.close();
             fos.close();
         } catch (Exception e) {
@@ -176,7 +172,7 @@ public class slangWordList {
 
     public void loadHistory() {
         // load from file (slang_history.txt)
-        File file = new File("slang_history.txt");
+        File file = new File("slang_history.dat");
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -189,7 +185,7 @@ public class slangWordList {
             // load hashMap from file
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            this.historyMap = (HashMap<String, ArrayList<String>>) ois.readObject();
+            this.historyList = (ArrayList<history>) ois.readObject();
             ois.close();
             fis.close();
         } catch (Exception e) {
@@ -200,11 +196,12 @@ public class slangWordList {
     public HashMap<String, ArrayList<String>> findFromDefinition(String definition) {
         HashMap<String, ArrayList<String>> map = new HashMap<>();
         if (!definition.isEmpty()) {
-            for (Map.Entry<String, ArrayList<String>> entry : this.map.entrySet())
+            for (Map.Entry<String, ArrayList<String>> entry : this.map.entrySet()) {
                 for (String word : entry.getValue())
                     if (word.toLowerCase(Locale.ROOT).contains(definition.toLowerCase(Locale.ROOT))) {
                         map.put(entry.getKey(), entry.getValue());
                     }
+            }
         }
 
         return map;
