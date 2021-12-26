@@ -4979,6 +4979,7 @@ OTAKU`Obsessive fan
 OTAY`Okay
 OTB`Off The boat
 OTC`Over The Counter
+OTC`Over The Counter
 OTD`On The Dot| Out The Door
 OTE`Over The Edge
 OTF`Off Topic Forum

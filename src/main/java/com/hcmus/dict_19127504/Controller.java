@@ -8,6 +8,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -100,7 +103,23 @@ public class Controller implements Initializable {
     @FXML
     private Button DBtn;
 
+    @FXML
+    private Button _ABtn;
 
+    @FXML
+    private Button _BBtn;
+
+    @FXML
+    private Button _CBtn;
+
+    @FXML
+    private Button _DBtn;
+
+    @FXML
+    private Label quizDefinitionLabel;
+
+    @FXML
+    private Button quizDefinitionRefreshBtn;
 
     private ObservableList<slangWord> list = FXCollections.observableArrayList();
     private ObservableList<slangWord> listSearch = FXCollections.observableArrayList();
@@ -126,6 +145,7 @@ public class Controller implements Initializable {
         editBtn.setOnAction(event -> onClickEditBtn());
         random1SlangWordBtn.setOnAction(event -> onClickRandom1SlangWordBtn());
         quizSlangWordRefreshBtn.setOnAction(event -> onClickQuizSlangWordRefreshBtn());
+        quizDefinitionRefreshBtn.setOnAction(event -> onClickQuizDefinitionRefreshBtn());
         findSlangWordTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             slangWord selectedItem =  findSlangWordTableView.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
@@ -137,7 +157,52 @@ public class Controller implements Initializable {
         addHistoryToTableView();
         random1SlangWord();
         quizSlangWord();
+        quizDefinition();
     }
+
+    private void onClickQuizDefinitionRefreshBtn() {
+        quizDefinition();
+    }
+
+    private void quizDefinition() {
+        resetBtn(_ABtn, _BBtn, _CBtn, _DBtn);
+        Random random = new Random();
+        int index = random.nextInt(list.size());
+        slangWord slangWord = list.get(index);
+        String definition = slangWord.getMeaning();
+        quizDefinitionLabel.setText(definition);
+        quizDefinitionLabel.setWrapText(true);
+        quizDefinitionLabel.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 45));
+        // random answer
+        int answer = random.nextInt(4);
+        ArrayList<String> listAnswer = new ArrayList<>();
+        listAnswer.add(slangWord.getWord());
+        int i = 0;
+        while (i >= 0) {
+            if (i == 3) {
+                break;
+            }
+            int rand = random.nextInt(list.size());
+            if (!list.get(rand).getMeaning().equals(slangWord.getMeaning())) {
+                listAnswer.add(list.get(rand).getWord());
+                i++;
+            } else
+                i--;
+        }
+
+        Collections.shuffle(listAnswer);
+        _ABtn.setText(listAnswer.get(0));
+        _BBtn.setText(listAnswer.get(1));
+        _CBtn.setText(listAnswer.get(2));
+        _DBtn.setText(listAnswer.get(3));
+
+        chooseAnswer(_ABtn, _BBtn, _CBtn, _DBtn, slangWord.getWord());
+        chooseAnswer(_BBtn, _ABtn, _CBtn, _DBtn, slangWord.getWord());
+        chooseAnswer(_CBtn, _ABtn, _BBtn, _DBtn, slangWord.getWord());
+        chooseAnswer(_DBtn, _ABtn, _BBtn, _CBtn, slangWord.getWord());
+
+    }
+
 
     private void onClickQuizSlangWordRefreshBtn() {
         quizSlangWord();
@@ -151,7 +216,9 @@ public class Controller implements Initializable {
         Random random = new Random();
         int index = random.nextInt(list.size());
         random1SlangWordLabel.setText(list.get(index).getWord());
+        random1SlangWordLabel.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 60));
         random1SlangWordMeaningLabel.setText(list.get(index).getMeaning());
+        random1SlangWordMeaningLabel.setWrapText(true);
     }
 
     private void onClickResetBtn() throws FileNotFoundException {
@@ -160,6 +227,10 @@ public class Controller implements Initializable {
     }
 
     private void onClickDeleteBtn() {
+        deleteSlangWord();
+    }
+
+    private void deleteSlangWord() {
         String slangWord = slangWordInput.getText().trim();
         String meaning = meaningInput.getText().trim();
         if (slangWord.isEmpty() || meaning.isEmpty()) {
@@ -184,10 +255,10 @@ public class Controller implements Initializable {
             if (result.get() == cancel) {
                 return;
             }
-        } else
+        }
+        else
             showDialog("Thông báo", "Không tìm thấy từ", Alert.AlertType.INFORMATION);
     }
-
     private void onClickEditBtn() {
         String slangWord = slangWordInput.getText().trim();
         String meaning = meaningInput.getText().trim();
@@ -333,7 +404,7 @@ public class Controller implements Initializable {
     }
 
     private void quizSlangWord() {
-        resetBtn();
+        resetBtn(ABtn, BBtn, CBtn, DBtn);
         ArrayList<String> listAnswer = new ArrayList<>();
         int size = wordListInstance.getList().size();
         int random = (int) (Math.random() * size);
@@ -341,7 +412,9 @@ public class Controller implements Initializable {
         String word = wordListInstance.getList().keySet().toArray()[random].toString();
         String meaning = wordListInstance.getList().get(wordListInstance.getList().keySet().toArray()[random]).get(random2);
         quizSlangWordLabel.setText(word);
+        quizSlangWordLabel.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 60));
         listAnswer.add(meaning);
+
         for (int i = 0; i < 3; i++) {
             int random3 = (int) (Math.random() * size);
             int random4 = (int) (Math.random() * wordListInstance.getList().get(wordListInstance.getList().keySet().toArray()[random3]).size());
@@ -368,40 +441,56 @@ public class Controller implements Initializable {
             CBtn.setDisable(true);
             DBtn.setDisable(true);
             if (ABtn.getText().equals(answer)) {
-                ABtn.setStyle("-fx-background-color: #4BD62F");
+                setRightAnswerBtn(ABtn);
             }
             else {
                 // set button is answer
                 if (BBtn.getText().equals(answer)) {
-                    BBtn.setStyle("-fx-background-color: #4BD62F");
-                    BBtn.setDisable(false);
+                    setRightAnswerBtn(BBtn);
                 }
                 else if (CBtn.getText().equals(answer)) {
-                    CBtn.setStyle("-fx-background-color: #4BD62F");
-                    CBtn.setDisable(false);
+                    setRightAnswerBtn(CBtn);
                 }
                 else if (DBtn.getText().equals(answer)) {
-                    DBtn.setStyle("-fx-background-color: #4BD62F");
-                    DBtn.setDisable(false);
+                    setRightAnswerBtn(DBtn);
                 }
-                ABtn.setStyle("-fx-background-color: #ff0000");
-                ABtn.setTextFill(Color.WHITE);
+                setWrongAnswerBtn(ABtn);
             }
         });
     }
 
-    private void resetBtn() {
+    private void resetBtn(Button ABtn, Button BBtn, Button CBtn, Button DBtn) {
         ABtn.setTextFill(Color.BLACK);
         BBtn.setTextFill(Color.BLACK);
         CBtn.setTextFill(Color.BLACK);
         DBtn.setTextFill(Color.BLACK);
-        ABtn.setDisable(false);
-        BBtn.setDisable(false);
-        CBtn.setDisable(false);
-        DBtn.setDisable(false);
-        ABtn.setStyle("-fx-background-color: #ffffff");
-        BBtn.setStyle("-fx-background-color: #ffffff");
-        CBtn.setStyle("-fx-background-color: #ffffff");
-        DBtn.setStyle("-fx-background-color: #ffffff");
+        setDisableBtn(ABtn, BBtn, CBtn, DBtn, false);
+        setColorBtn(ABtn, BBtn, CBtn, DBtn);
+
+    }
+
+    private void setRightAnswerBtn(Button btn) {
+        btn.setStyle("-fx-background-color: #4BD62F");
+        btn.setDisable(false);
+    }
+
+    private void setWrongAnswerBtn(Button btn) {
+        btn.setStyle("-fx-background-color: #ff0000");
+        btn.setTextFill(Color.WHITE);
+    }
+
+    private void setDisableBtn(Button ABtn, Button BBtn, Button CBtn, Button DBtn, boolean disable) {
+        ABtn.setDisable(disable);
+        BBtn.setDisable(disable);
+        CBtn.setDisable(disable);
+        DBtn.setDisable(disable);
+    }
+
+    private void setColorBtn(Button ABtn, Button BBtn, Button CBtn, Button DBtn) {
+        // set style for button default color
+        ABtn.setStyle("-fx-background-color: #FFFFFF");
+        BBtn.setStyle("-fx-background-color: #FFFFFF");
+        CBtn.setStyle("-fx-background-color: #FFFFFF");
+        DBtn.setStyle("-fx-background-color: #FFFFFF");
     }
 }
