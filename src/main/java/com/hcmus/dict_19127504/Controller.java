@@ -136,7 +136,7 @@ public class Controller implements Initializable {
         resetBtn.setOnAction(event -> {
             try {
                 onClickResetBtn();
-                showDialog("Thông báo", "Đã reset", Alert.AlertType.INFORMATION);
+                showDialog("Đã reset");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -232,7 +232,7 @@ public class Controller implements Initializable {
         String slangWord = slangWordInput.getText().trim();
         String meaning = meaningInput.getText().trim();
         if (slangWord.isEmpty() || meaning.isEmpty()) {
-            showDialog("Thông báo", "Hãy nhập từ lóng", Alert.AlertType.INFORMATION);
+            showDialog("Hãy nhập từ lóng");
             return;
         }
         if (wordListInstance.getList().containsKey(slangWord)) {
@@ -247,7 +247,7 @@ public class Controller implements Initializable {
             if (result.get() == confirm) {
                 // overwrite
                 wordListInstance.deleteSlangWord(slangWord, meaning);
-                showDialog("Thông báo", "Xóa từ thành công", Alert.AlertType.INFORMATION);
+                showDialog("Xóa từ thành công");
                 return;
             }
             if (result.get() == cancel) {
@@ -255,30 +255,30 @@ public class Controller implements Initializable {
             }
         }
         else
-            showDialog("Thông báo", "Không tìm thấy từ", Alert.AlertType.INFORMATION);
+            showDialog("Không tìm thấy từ");
     }
     private void onClickEditBtn() {
         String slangWord = slangWordInput.getText().trim();
         String meaning = meaningInput.getText().trim();
         if (slangWord.isEmpty() || meaning.isEmpty()) {
-            showDialog("Thông báo", "Hãy nhập từ lóng và nghĩa", Alert.AlertType.INFORMATION);
+            showDialog("Hãy nhập từ lóng và nghĩa");
             return;
         }
         if (wordListInstance.getList().containsKey(slangWord)) {
             if (!wordListInstance.checkMeaning(slangWord, meaning)) {
                 if (wordListInstance.editSlangWord(slangWord, meaning))
-                    showDialog("Thông báo", "Sửa từ thành công", Alert.AlertType.INFORMATION);
+                    showDialog("Sửa từ thành công");
             } else {
-                showDialog("Thông báo", "Vui lòng chọn nghĩa khác", Alert.AlertType.INFORMATION);
+                showDialog("Vui lòng chọn nghĩa khác");
             }
         }
         else
-            showDialog("Thông báo", "Không tìm thấy từ", Alert.AlertType.INFORMATION);
+            showDialog("Không tìm thấy từ");
     }
 
-    private void showDialog(String title, String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
+    private void showDialog(String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thông báo");
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
@@ -322,12 +322,12 @@ public class Controller implements Initializable {
                     return;
             }
             else {
-                showDialog("Thông báo", "Vui lòng chọn nghĩa khác", Alert.AlertType.INFORMATION);
+                showDialog("Vui lòng chọn nghĩa khác");
             }
         }
         else {
             wordListInstance.setMeaningOverwrite(slangWord, meaning);
-            showDialog("Thông báo", "Thêm từ thành công", Alert.AlertType.INFORMATION);
+            showDialog("Thêm từ thành công");
         }
     }
 
@@ -343,7 +343,7 @@ public class Controller implements Initializable {
         listSearch.clear();
         String word = findInput.getText().trim();
         if (word.equals("")) {
-            showDialog("Thông báo", "Vui lòng nhập từ cần tìm", Alert.AlertType.INFORMATION);
+            showDialog("Vui lòng nhập từ cần tìm");
             return;
         }
         if (wordListInstance.findSlangWord(word) != null) {
@@ -352,7 +352,7 @@ public class Controller implements Initializable {
             }
         }
         else {
-            showDialog("Thông báo", "Không tìm thấy từ", Alert.AlertType.INFORMATION);
+            showDialog("Không tìm thấy từ");
         }
         findSlangWordTableView.setItems(listSearch);
         wordListInstance.addHistory(word.toUpperCase(Locale.ROOT), dtf.format(now));
@@ -363,13 +363,13 @@ public class Controller implements Initializable {
         setColumn();
         String definition = findInput.getText().trim();
         if (definition.equals("")) {
-            showDialog("Thông báo", "Vui lòng nhập nghĩa cần tìm", Alert.AlertType.INFORMATION);
+            showDialog("Vui lòng nhập nghĩa cần tìm");
             return;
         }
         listSearch.clear();
         HashMap<String, ArrayList<String>> list = wordListInstance.findFromDefinition(definition);
         if (list.size() == 0)
-            showDialog("Thông báo", "Không tìm thấy từ", Alert.AlertType.INFORMATION);
+            showDialog("Không tìm thấy từ");
         else {
             for (String key : list.keySet())
                 for (String meaning : list.get(key)) {
@@ -401,23 +401,31 @@ public class Controller implements Initializable {
         }
     }
 
-    private void quizSlangWord() {
-        resetBtn(ABtn, BBtn, CBtn, DBtn);
-        ArrayList<String> listAnswer = new ArrayList<>();
-        int size = wordListInstance.getList().size();
+    private ArrayList<String> randomWordMeaning(int size) {
+        ArrayList<String> list = new ArrayList<>();
         int random = (int) (Math.random() * size);
         int random2 = (int) (Math.random() * wordListInstance.getList().get(wordListInstance.getList().keySet().toArray()[random]).size());
         String word = wordListInstance.getList().keySet().toArray()[random].toString();
         String meaning = wordListInstance.getList().get(wordListInstance.getList().keySet().toArray()[random]).get(random2);
+        list.add(word);
+        list.add(meaning);
+        return list;
+    }
+
+    private void quizSlangWord() {
+        resetBtn(ABtn, BBtn, CBtn, DBtn);
+        ArrayList<String> listAnswer = new ArrayList<>();
+        int size = wordListInstance.getList().size();
+        ArrayList<String> list = randomWordMeaning(size);
+        String word = list.get(0);
+        String meaning = list.get(1);
         quizSlangWordLabel.setText(word);
         quizSlangWordLabel.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 60));
         listAnswer.add(meaning);
 
         for (int i = 0; i < 3; i++) {
-            int random3 = (int) (Math.random() * size);
-            int random4 = (int) (Math.random() * wordListInstance.getList().get(wordListInstance.getList().keySet().toArray()[random3]).size());
-            String word2 = wordListInstance.getList().keySet().toArray()[random3].toString();
-            String meaning2 = wordListInstance.getList().get(wordListInstance.getList().keySet().toArray()[random3]).get(random4);
+            ArrayList<String> list2 = randomWordMeaning(size);
+            String meaning2 = list2.get(1);
             if (!meaning2.equals(meaning))
                 listAnswer.add(meaning2);
         }
