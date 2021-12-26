@@ -197,10 +197,11 @@ public class slangWordList {
         HashMap<String, ArrayList<String>> map = new HashMap<>();
         if (!definition.isEmpty()) {
             for (Map.Entry<String, ArrayList<String>> entry : this.map.entrySet()) {
-                for (String word : entry.getValue())
+                for (String word : entry.getValue()) {
                     if (word.toLowerCase(Locale.ROOT).contains(definition.toLowerCase(Locale.ROOT))) {
                         map.put(entry.getKey(), entry.getValue());
                     }
+                }
             }
         }
 

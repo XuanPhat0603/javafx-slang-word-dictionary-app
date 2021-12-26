@@ -127,7 +127,30 @@
     </Tab>
       <Tab text="Từ lóng mỗi ngày">
          <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="random1SlangWordLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="231.0" layoutY="46.0" prefHeight="134.0" prefWidth="416.0" text="test" textAlignment="CENTER">
+                     <font>
+                        <Font size="60.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="random1SlangWordMeaningLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="188.0" layoutY="230.0" prefHeight="76.0" prefWidth="503.0" text="Label" textAlignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </Label>
+                  <Button fx:id="random1SlangWordBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="393.0" layoutY="409.0" mnemonicParsing="false" text="Refresh" textAlignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+               </children></AnchorPane>
          </content>
       </Tab>
       <Tab text="Nhìn từ đoán nghĩa">

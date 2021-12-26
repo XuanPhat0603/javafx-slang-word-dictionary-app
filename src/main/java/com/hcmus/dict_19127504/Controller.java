@@ -72,6 +72,15 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<history, String> wordHistoryColumn;
 
+    @FXML
+    private Label random1SlangWordLabel;
+
+    @FXML
+    private Label random1SlangWordMeaningLabel;
+
+    @FXML
+    private Button random1SlangWordBtn;
+
     private ObservableList<slangWord> list = FXCollections.observableArrayList();
     private ObservableList<slangWord> listSearch = FXCollections.observableArrayList();
     private ObservableList<history> listHistory = FXCollections.observableArrayList();
@@ -94,6 +103,7 @@ public class Controller implements Initializable {
             }
         });
         editBtn.setOnAction(event -> onClickEditBtn());
+        random1SlangWordBtn.setOnAction(event -> onClickRandom1SlangWordBtn());
         findSlangWordTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             slangWord selectedItem =  findSlangWordTableView.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
@@ -103,6 +113,18 @@ public class Controller implements Initializable {
         });
         addSlangWordToTableView();
         addHistoryToTableView();
+        random1SlangWord();
+    }
+
+    private void onClickRandom1SlangWordBtn() {
+        random1SlangWord();
+    }
+
+    private void random1SlangWord() {
+        Random random = new Random();
+        int index = random.nextInt(list.size());
+        random1SlangWordLabel.setText(list.get(index).getWord());
+        random1SlangWordMeaningLabel.setText(list.get(index).getMeaning());
     }
 
     private void onClickResetBtn() throws FileNotFoundException {
