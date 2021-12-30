@@ -216,12 +216,18 @@ public class slangWordList {
         saveHashMap();
     }
 
-    public boolean editSlangWord(String word, String meaning) {
+    public boolean editSlangWord(String word, String oldMeaning, String newMeaning) {
         if (this.map.containsKey(word)) {
-            this.map.get(word).clear();
-            this.map.get(word).add(meaning);
-            saveHashMap();
-            return true;
+            System.out.println("Word found");
+            ArrayList<String> list = this.map.get(word);
+            if (list.contains(oldMeaning)) {
+                list.remove(oldMeaning);
+                list.add(newMeaning);
+                this.map.put(word, list);
+                saveHashMap();
+                return true;
+            }
+            return false;
         }
         return false;
     }

@@ -91,7 +91,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Button fx:id="resetBtn" layoutX="959.0" layoutY="127.0" mnemonicParsing="false" text="Reset">
+                  <Button fx:id="resetBtn" layoutX="812.0" layoutY="127.0" mnemonicParsing="false" text="Reset">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -132,7 +132,7 @@
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="random1SlangWordLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="62.0" layoutY="48.0" prefHeight="134.0" prefWidth="755.0" textAlignment="CENTER" AnchorPane.bottomAnchor="493.0" AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="61.0" AnchorPane.topAnchor="48.0">
+                  <Label fx:id="random1SlangWordLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="53.0" layoutY="141.0" prefHeight="134.0" prefWidth="755.0" text="slangWord" textAlignment="CENTER" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="141.0">
                      <font>
                         <Font size="60.0" />
                      </font>
@@ -140,15 +140,15 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="random1SlangWordMeaningLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="83.0" layoutY="230.0" prefHeight="76.0" prefWidth="713.0" textAlignment="CENTER" AnchorPane.bottomAnchor="369.0" AnchorPane.leftAnchor="83.0" AnchorPane.rightAnchor="82.0" AnchorPane.topAnchor="230.0">
+                  <Label fx:id="random1SlangWordMeaningLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="74.0" layoutY="271.0" prefHeight="133.0" prefWidth="713.0" text="Meaning" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="271.0" AnchorPane.leftAnchor="74.0" AnchorPane.rightAnchor="91.0" AnchorPane.topAnchor="271.0">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="30.0" />
                      </font>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </Label>
-                  <Button fx:id="random1SlangWordBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="404.0" layoutY="410.0" mnemonicParsing="false" text="Refresh" textAlignment="CENTER" AnchorPane.bottomAnchor="234.0" AnchorPane.leftAnchor="404.0" AnchorPane.rightAnchor="404.0" AnchorPane.topAnchor="410.0">
+                  <Button fx:id="random1SlangWordBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="396.0" layoutY="442.0" mnemonicParsing="false" text="Refresh" textAlignment="CENTER" AnchorPane.bottomAnchor="202.0" AnchorPane.leftAnchor="396.0" AnchorPane.rightAnchor="412.0" AnchorPane.topAnchor="442.0">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -175,7 +175,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button fx:id="ABtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button">
+                        <Button fx:id="ABtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" textAlignment="CENTER" wrapText="true">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -183,7 +183,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="BBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" textAlignment="CENTER" GridPane.columnIndex="1">
+                        <Button fx:id="BBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -191,7 +191,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="CBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" textAlignment="CENTER" GridPane.rowIndex="1">
+                        <Button fx:id="CBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -199,7 +199,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="DBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Button fx:id="DBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -217,7 +217,7 @@
                </children></AnchorPane>
          </content>
       </Tab>
-      <Tab text="Nhìn nghĩa đoán từ">
+      <Tab fx:id="quizDefineTab" text="Nhìn nghĩa đoán từ">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -231,7 +231,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="_ABtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button">
+                        <Button fx:id="_ABtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" textAlignment="CENTER" wrapText="true">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -239,7 +239,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="_BBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" GridPane.columnIndex="1">
+                        <Button fx:id="_BBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -247,7 +247,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="_CBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" GridPane.rowIndex="1">
+                        <Button fx:id="_CBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -255,7 +255,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="_DBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Button fx:id="_DBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
                               <Font size="20.0" />
                            </font>

@@ -4,13 +4,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-
+import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -121,6 +123,9 @@ public class Controller implements Initializable {
     @FXML
     private Button quizDefinitionRefreshBtn;
 
+    @FXML
+    private Tab quizDefineTab;
+
     private ObservableList<slangWord> list = FXCollections.observableArrayList();
     private ObservableList<slangWord> listSearch = FXCollections.observableArrayList();
     private ObservableList<history> listHistory = FXCollections.observableArrayList();
@@ -153,6 +158,7 @@ public class Controller implements Initializable {
                 meaningInput.setText(selectedItem.getMeaning());
             }
         });
+        quizDefineTab.setOnSelectionChanged(event -> isFresh = true);
         addSlangWordToTableView();
         addHistoryToTableView();
         random1SlangWord();
@@ -238,6 +244,8 @@ public class Controller implements Initializable {
         }
         if (wordListInstance.getList().containsKey(slangWord)) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
             alert.setTitle("Thông báo");
             alert.setHeaderText("Bạn có chắc chắn muốn xóa từ này không?");
             alert.setContentText("Từ: " + slangWord + "\nNghĩa: " + meaning);
@@ -254,31 +262,61 @@ public class Controller implements Initializable {
             if (result.get() == cancel) {
                 return;
             }
-        }
-        else
+        } else
             showDialog("Không tìm thấy từ");
     }
     private void onClickEditBtn() {
-        String slangWord = slangWordInput.getText().trim();
-        String meaning = meaningInput.getText().trim();
-        if (slangWord.isEmpty() || meaning.isEmpty()) {
-            showDialog("Hãy nhập từ lóng và nghĩa");
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
+        alert.setTitle("Nhập nghĩa mới");
+        alert.setHeaderText(null);
+        alert.setContentText("Nhập nghĩa mới:");
+        TextField textField = new TextField();
+        textField.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 30));
+        textField.setMaxWidth(300);
+        textField.setMaxHeight(50);
+        textField.setMinHeight(50);
+        textField.setMinWidth(300);
+        textField.setAlignment(Pos.CENTER);
+        textField.setStyle("-fx-background-color: #f5f5f5;");
+        textField.setPromptText("Nhập nghĩa mới");
+        alert.getDialogPane().setContent(textField);
+        ButtonType confirm = new ButtonType("Có", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancel = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(confirm, cancel);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == confirm) {
+            String slangWord = slangWordInput.getText().trim();
+            String oldMeaning = meaningInput.getText().trim();
+            String newMeaning = textField.getText().trim();
+            if (slangWord.isEmpty() || newMeaning.isEmpty() || oldMeaning.isEmpty()) {
+                showDialog("Hãy nhập từ cần sửa và nghĩa mới");
+                return;
+            }
+            if (oldMeaning.equals(newMeaning)) {
+                showDialog("Nghĩa mới không thay đổi");
+                return;
+            }
+            if (wordListInstance.getList().containsKey(slangWord)) {
+                if (!wordListInstance.checkMeaning(slangWord, newMeaning)) {
+                     if (wordListInstance.editSlangWord(slangWord, oldMeaning, newMeaning))
+                        showDialog("Sửa từ thành công");
+                } else {
+                    showDialog("Vui lòng chọn nghĩa khác");
+                }
+            } else
+                showDialog("Không tìm thấy từ");
+        } else if (result.get() == cancel) {
             return;
         }
-        if (wordListInstance.getList().containsKey(slangWord)) {
-            if (!wordListInstance.checkMeaning(slangWord, meaning)) {
-                if (wordListInstance.editSlangWord(slangWord, meaning))
-                    showDialog("Sửa từ thành công");
-            } else {
-                showDialog("Vui lòng chọn nghĩa khác");
-            }
-        }
-        else
-            showDialog("Không tìm thấy từ");
     }
 
     private void showDialog(String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
         alert.setTitle("Thông báo");
         alert.setHeaderText(null);
         alert.setContentText(content);
@@ -317,7 +355,6 @@ public class Controller implements Initializable {
                 if (result.get() == duplicate) {
                     wordListInstance.setMeaningDuplicate(slangWord, meaning);
                     return;
-
                 }
                 if (result.get() == cancel)
                     return;
