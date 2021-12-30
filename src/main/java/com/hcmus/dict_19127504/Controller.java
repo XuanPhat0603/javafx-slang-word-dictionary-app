@@ -20,6 +20,7 @@ import java.util.*;
 public class Controller implements Initializable {
 
     slangWordList wordListInstance = slangWordList.getInstance();
+    Boolean isFresh = true;
 
     @FXML
     private TableView<slangWord> findSlangWordTableView;
@@ -164,6 +165,7 @@ public class Controller implements Initializable {
     }
 
     private void quizDefinition() {
+        isFresh = true;
         resetBtn(_ABtn, _BBtn, _CBtn, _DBtn);
         Random random = new Random();
         int index = random.nextInt(list.size());
@@ -413,6 +415,7 @@ public class Controller implements Initializable {
     }
 
     private void quizSlangWord() {
+        isFresh = true;
         resetBtn(ABtn, BBtn, CBtn, DBtn);
         ArrayList<String> listAnswer = new ArrayList<>();
         int size = wordListInstance.getList().size();
@@ -443,28 +446,27 @@ public class Controller implements Initializable {
 
     private void chooseAnswer(Button ABtn, Button BBtn, Button CBtn, Button DBtn, String answer) {
         ABtn.setOnAction(e -> {
-            BBtn.setDisable(true);
-            CBtn.setDisable(true);
-            DBtn.setDisable(true);
-            if (ABtn.getText().equals(answer)) {
-                setRightAnswerBtn(ABtn);
-            }
-            else {
-                // set button is answer
-                if (BBtn.getText().equals(answer)) {
-                    setRightAnswerBtn(BBtn);
+            if (isFresh) {
+                BBtn.setDisable(true);
+                CBtn.setDisable(true);
+                DBtn.setDisable(true);
+                if (ABtn.getText().equals(answer)) {
+                    setRightAnswerBtn(ABtn);
+                } else {
+                    // set button is answer
+                    if (BBtn.getText().equals(answer)) {
+                        setRightAnswerBtn(BBtn);
+                    } else if (CBtn.getText().equals(answer)) {
+                        setRightAnswerBtn(CBtn);
+                    } else if (DBtn.getText().equals(answer)) {
+                        setRightAnswerBtn(DBtn);
+                    }
+                    setWrongAnswerBtn(ABtn);
                 }
-                else if (CBtn.getText().equals(answer)) {
-                    setRightAnswerBtn(CBtn);
-                }
-                else if (DBtn.getText().equals(answer)) {
-                    setRightAnswerBtn(DBtn);
-                }
-                setWrongAnswerBtn(ABtn);
+                isFresh = false;
             }
         });
     }
-
     private void resetBtn(Button ABtn, Button BBtn, Button CBtn, Button DBtn) {
         ABtn.setTextFill(Color.BLACK);
         BBtn.setTextFill(Color.BLACK);
