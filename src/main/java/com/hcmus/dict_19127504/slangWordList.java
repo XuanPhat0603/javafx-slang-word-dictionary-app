@@ -131,12 +131,14 @@ public class slangWordList {
         }
     }
 
-    public ArrayList<String> findSlangWord(String word) {
-        ArrayList<String> list = this.map.get(word.toUpperCase(Locale.ROOT));
-        if (list == null)
-            return null;
-
-        return list;
+    public HashMap<String, ArrayList<String>> findSlangWord(String word) {
+        HashMap<String, ArrayList<String>> findSlangWord = new HashMap<>();
+        for (String key : this.map.keySet()) {
+            if (key.contains(word.toUpperCase(Locale.ROOT))) {
+                findSlangWord.put(key, this.map.get(key));
+            }
+        }
+        return findSlangWord;
     }
     // history
     public ArrayList<history> getHistory() {

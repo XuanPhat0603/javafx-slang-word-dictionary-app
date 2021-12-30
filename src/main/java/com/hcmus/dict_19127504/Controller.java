@@ -186,8 +186,7 @@ public class Controller implements Initializable {
             if (!list.get(rand).getMeaning().equals(slangWord.getMeaning())) {
                 listAnswer.add(list.get(rand).getWord());
                 i++;
-            } else
-                i--;
+            } else i--;
         }
 
         Collections.shuffle(listAnswer);
@@ -349,8 +348,10 @@ public class Controller implements Initializable {
             return;
         }
         if (wordListInstance.findSlangWord(word) != null) {
-            for (String meaning : wordListInstance.findSlangWord(word)) {
-                listSearch.add(new slangWord(word.toUpperCase(Locale.ROOT), meaning));
+            for (String key : wordListInstance.findSlangWord(word).keySet()) {
+                for (String meaning : wordListInstance.getList().get(key)) {
+                    listSearch.add(new slangWord(key, meaning));
+                }
             }
         }
         else {
@@ -373,10 +374,11 @@ public class Controller implements Initializable {
         if (list.size() == 0)
             showDialog("Không tìm thấy từ");
         else {
-            for (String key : list.keySet())
+            for (String key : list.keySet()) {
                 for (String meaning : list.get(key)) {
                     listSearch.add(new slangWord(key, meaning));
                 }
+            }
         }
         findSlangWordTableView.setItems(listSearch);
     }
@@ -385,9 +387,11 @@ public class Controller implements Initializable {
         wordColumn.setCellValueFactory(new PropertyValueFactory<>("word"));
         meaningColumn.setCellValueFactory(new PropertyValueFactory<>("meaning"));
         list.clear();
-        for (String key : wordListInstance.getList().keySet())
-            for (String meaning : wordListInstance.getList().get(key))
+        for (String key : wordListInstance.getList().keySet()) {
+            for (String meaning : wordListInstance.getList().get(key)) {
                 list.add(new slangWord(key, meaning));
+            }
+        }
         listSlangWord.setItems(list);
     }
 
@@ -398,7 +402,7 @@ public class Controller implements Initializable {
         if (wordListInstance.getHistory().size() > 0) {
             for (int i = wordListInstance.getHistory().size() - 1; i >= 0; i--) {
                 listHistory.add(new history(wordListInstance.getHistory().get(i).getWord(), wordListInstance.getHistory().get(i).getTime()));
-            listHistoryTableView.setItems(listHistory);
+                listHistoryTableView.setItems(listHistory);
             }
         }
     }
@@ -452,13 +456,16 @@ public class Controller implements Initializable {
                 DBtn.setDisable(true);
                 if (ABtn.getText().equals(answer)) {
                     setRightAnswerBtn(ABtn);
-                } else {
+                }
+                else {
                     // set button is answer
                     if (BBtn.getText().equals(answer)) {
                         setRightAnswerBtn(BBtn);
-                    } else if (CBtn.getText().equals(answer)) {
+                    }
+                    else if (CBtn.getText().equals(answer)) {
                         setRightAnswerBtn(CBtn);
-                    } else if (DBtn.getText().equals(answer)) {
+                    }
+                    else if (DBtn.getText().equals(answer)) {
                         setRightAnswerBtn(DBtn);
                     }
                     setWrongAnswerBtn(ABtn);
@@ -474,7 +481,6 @@ public class Controller implements Initializable {
         DBtn.setTextFill(Color.BLACK);
         setDisableBtn(ABtn, BBtn, CBtn, DBtn, false);
         setColorBtn(ABtn, BBtn, CBtn, DBtn);
-
     }
 
     private void setRightAnswerBtn(Button btn) {
