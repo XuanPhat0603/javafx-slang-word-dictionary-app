@@ -285,14 +285,18 @@ public class Controller implements Initializable {
         ButtonType confirm = new ButtonType("Có", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancel = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
         alert.getButtonTypes().setAll(confirm, cancel);
+        String slangWord = slangWordInput.getText().trim();
+        String oldMeaning = meaningInput.getText().trim();
+        if (slangWord.isEmpty() || oldMeaning.isEmpty()) {
+            showDialog("Hãy nhập từ cần sửa");
+            return;
+        }
         Optional<ButtonType> result = alert.showAndWait();
-
         if (result.get() == confirm) {
-            String slangWord = slangWordInput.getText().trim();
-            String oldMeaning = meaningInput.getText().trim();
+
             String newMeaning = textField.getText().trim();
-            if (slangWord.isEmpty() || newMeaning.isEmpty() || oldMeaning.isEmpty()) {
-                showDialog("Hãy nhập từ cần sửa và nghĩa mới");
+            if (newMeaning.isEmpty()) {
+                showDialog("Hãy nhập nghĩa mới");
                 return;
             }
             if (oldMeaning.equals(newMeaning)) {
@@ -335,7 +339,7 @@ public class Controller implements Initializable {
             alert.showAndWait();
             return;
         }
-        if (wordListInstance.findSlangWord(slangWord) != null) {
+        if (wordListInstance.checkWord(slangWord)) {
             if (!wordListInstance.checkMeaning(slangWord, meaning)) {
                 // show error
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -521,7 +525,7 @@ public class Controller implements Initializable {
     }
 
     private void setRightAnswerBtn(Button btn) {
-        btn.setStyle("-fx-background-color: #4BD62F");
+        btn.setStyle("-fx-background-color: #00ff00");
         btn.setDisable(false);
     }
 

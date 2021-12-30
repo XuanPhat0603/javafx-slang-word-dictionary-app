@@ -138,6 +138,9 @@ public class slangWordList {
                 findSlangWord.put(key, this.map.get(key));
             }
         }
+        if (findSlangWord.size() == 0) {
+            return null;
+        }
         return findSlangWord;
     }
     // history
@@ -218,7 +221,6 @@ public class slangWordList {
 
     public boolean editSlangWord(String word, String oldMeaning, String newMeaning) {
         if (this.map.containsKey(word)) {
-            System.out.println("Word found");
             ArrayList<String> list = this.map.get(word);
             if (list.contains(oldMeaning)) {
                 list.remove(oldMeaning);
@@ -234,14 +236,16 @@ public class slangWordList {
 
     public boolean deleteSlangWord(String word, String meaning) {
         if (this.map.containsKey(word)) {
-            for (String s : this.map.get(word))
+            for (String s : this.map.get(word)) {
                 if (s.equals(meaning)) {
                     this.map.get(word).remove(s);
-                    if (this.map.get(word).size() == 0)
+                    if (this.map.get(word).size() == 0) {
                         this.map.remove(word);
+                    }
                     saveHashMap();
                     return true;
                 }
+            }
         }
         return false;
     }
@@ -252,5 +256,9 @@ public class slangWordList {
                 if (s.toLowerCase(Locale.ROOT).equals(meaning.toLowerCase(Locale.ROOT)))
                     return true;
         return false;
+    }
+
+    public boolean checkWord(String word) {
+        return this.map.containsKey(word);
     }
 }
