@@ -2,6 +2,7 @@ package com.hcmus.dict_19127504;
 
 import java.io.Serializable;
 
+// create history object
 public class history implements Serializable {
     private String word;
     private String time;

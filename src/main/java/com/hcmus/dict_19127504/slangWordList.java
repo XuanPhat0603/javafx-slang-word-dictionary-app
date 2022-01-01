@@ -5,6 +5,7 @@ import java.util.*;
 
 public class slangWordList {
 
+    // save slangWordList to hashmap
     private static slangWordList instanceSlangWord = null;
     private HashMap<String, ArrayList<String>> map;
     private ArrayList<history> historyList;
@@ -16,7 +17,7 @@ public class slangWordList {
         this.start();
     }
 
-    // singleton
+    // singleton slangWordList object
     public static slangWordList getInstance() throws FileNotFoundException {
         if (instanceSlangWord == null)
             instanceSlangWord = new slangWordList();
@@ -24,12 +25,12 @@ public class slangWordList {
         return instanceSlangWord;
     }
 
+    // check file: history + data structure is exist
     public void start() throws FileNotFoundException {
         File file = new File("slang_hashmap.dat");
         File historyFile = new File("slang_history.dat");
         if (!file.exists()) {
             readData();
-            saveHashMap();
         }
         else {
             loadHashMap();
@@ -38,11 +39,22 @@ public class slangWordList {
            loadHistory();
        }
     }
-    // activity with slangWordList
+
+    // reset data
+    public void reset() throws FileNotFoundException {
+        this.map.clear();
+        readData();
+        saveHashMap();
+    }
+
+    //---------------------- activity with slangWordList------------------
+
+    // get hashmap
     public HashMap<String, ArrayList<String>> getList() {
         return this.map;
     }
 
+    // add new slangWord duplicate
     public void setMeaningDuplicate(String word, String meaning) {
         ArrayList<String> meaningList = this.map.get(word);
         if (meaningList == null)
@@ -52,6 +64,7 @@ public class slangWordList {
         saveHashMap();
     }
 
+    // add new slangWord overwrite
     public void setMeaningOverwrite(String word, String meaning) {
         ArrayList<String> meaningList = this.map.get(word);
         if (meaningList == null)
@@ -62,6 +75,7 @@ public class slangWordList {
         saveHashMap();
     }
 
+    // read data from file
     public void readData() throws FileNotFoundException {
         File file = new File("slang_original.txt");
         if (!file.exists())
@@ -86,9 +100,11 @@ public class slangWordList {
                     }
                 }
             }
+            saveHashMap();
         }
     }
 
+    // save hashmap to file
     public void saveHashMap() {
         File file = new File("slang_hashmap.dat");
         if (!file.exists()) {
@@ -110,6 +126,7 @@ public class slangWordList {
         }
     }
 
+    // load hashmap from file while structure is exist
     public void loadHashMap() {
         File file = new File("slang_hashmap.dat");
         if (!file.exists()) {
@@ -131,28 +148,96 @@ public class slangWordList {
         }
     }
 
-    public HashMap<String, ArrayList<String>> findSlangWord(String word) {
-        HashMap<String, ArrayList<String>> findSlangWord = new HashMap<>();
-        for (String key : this.map.keySet()) {
-            if (key.contains(word.toUpperCase(Locale.ROOT))) {
-                findSlangWord.put(key, this.map.get(key));
+    // find slangWord use searchWord
+    public ArrayList<String> findSlangWord(String word) {
+        ArrayList<String> meaningList = new ArrayList<>();
+        if (this.map.containsKey(word)) {
+            meaningList = this.map.get(word);
+        }
+        return meaningList;
+    }
+
+    // find slangword use definition
+    public HashMap<String, ArrayList<String>> findFromDefinition(String definition) {
+        HashMap<String, ArrayList<String>> map = new HashMap<>();
+        if (!definition.isEmpty()) {
+            for (Map.Entry<String, ArrayList<String>> entry : this.map.entrySet()) {
+                for (String word : entry.getValue()) {
+                    ArrayList<String> meaningList = new ArrayList<>();
+                    if (word.toLowerCase(Locale.ROOT).startsWith(definition.toLowerCase(Locale.ROOT))) {
+                        meaningList.add(word);
+                    }
+                    if (!meaningList.isEmpty()) {
+                        map.put(entry.getKey(), meaningList);
+                    }
+                }
             }
         }
-        if (findSlangWord.size() == 0) {
-            return null;
-        }
-        return findSlangWord;
+
+        return map;
     }
-    // history
+
+    // edit slangword
+    public boolean editSlangWord(String word, String oldMeaning, String newMeaning) {
+        if (this.map.containsKey(word)) {
+            ArrayList<String> list = this.map.get(word);
+            if (list.contains(oldMeaning)) {
+                list.remove(oldMeaning);
+                list.add(newMeaning);
+                this.map.put(word, list);
+                saveHashMap();
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    // delete slangword
+    public boolean deleteSlangWord(String word, String meaning) {
+        if (this.map.containsKey(word)) {
+            for (String s : this.map.get(word)) {
+                if (s.equals(meaning)) {
+                    this.map.get(word).remove(s);
+                    if (this.map.get(word).size() == 0) {
+                        this.map.remove(word);
+                    }
+                    saveHashMap();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // check slangword is exist
+    public boolean checkWord(String word) {
+        return this.map.containsKey(word);
+    }
+
+    // check meaning is exist
+    public boolean checkMeaning(String word, String meaning) {
+        if (this.map.containsKey(word))
+            for (String s : this.map.get(word))
+                if (s.toLowerCase(Locale.ROOT).equals(meaning.toLowerCase(Locale.ROOT)))
+                    return true;
+        return false;
+    }
+
+    //-------------------------History-------------------------------
+
+    // get history
     public ArrayList<history> getHistory() {
         return this.historyList;
     }
 
+    // add history
     public void addHistory(String word, String time) {
         this.historyList.add(new history(word, time));
         saveHistory();
     }
 
+    // save history to file
     public void saveHistory() {
         // save to file (slang_history.txt)
         File file = new File("slang_history.dat");
@@ -175,6 +260,7 @@ public class slangWordList {
         }
     }
 
+    // load history from file
     public void loadHistory() {
         // load from file (slang_history.txt)
         File file = new File("slang_history.dat");
@@ -196,69 +282,5 @@ public class slangWordList {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public HashMap<String, ArrayList<String>> findFromDefinition(String definition) {
-        HashMap<String, ArrayList<String>> map = new HashMap<>();
-        if (!definition.isEmpty()) {
-            for (Map.Entry<String, ArrayList<String>> entry : this.map.entrySet()) {
-                for (String word : entry.getValue()) {
-                    if (word.toLowerCase(Locale.ROOT).contains(definition.toLowerCase(Locale.ROOT))) {
-                        map.put(entry.getKey(), entry.getValue());
-                    }
-                }
-            }
-        }
-
-        return map;
-    }
-
-    public void reset() throws FileNotFoundException {
-        this.map.clear();
-        readData();
-        saveHashMap();
-    }
-
-    public boolean editSlangWord(String word, String oldMeaning, String newMeaning) {
-        if (this.map.containsKey(word)) {
-            ArrayList<String> list = this.map.get(word);
-            if (list.contains(oldMeaning)) {
-                list.remove(oldMeaning);
-                list.add(newMeaning);
-                this.map.put(word, list);
-                saveHashMap();
-                return true;
-            }
-            return false;
-        }
-        return false;
-    }
-
-    public boolean deleteSlangWord(String word, String meaning) {
-        if (this.map.containsKey(word)) {
-            for (String s : this.map.get(word)) {
-                if (s.equals(meaning)) {
-                    this.map.get(word).remove(s);
-                    if (this.map.get(word).size() == 0) {
-                        this.map.remove(word);
-                    }
-                    saveHashMap();
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean checkMeaning(String word, String meaning) {
-        if (this.map.containsKey(word))
-            for (String s : this.map.get(word))
-                if (s.toLowerCase(Locale.ROOT).equals(meaning.toLowerCase(Locale.ROOT)))
-                    return true;
-        return false;
-    }
-
-    public boolean checkWord(String word) {
-        return this.map.containsKey(word);
     }
 }

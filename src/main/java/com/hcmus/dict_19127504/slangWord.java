@@ -1,9 +1,9 @@
 package com.hcmus.dict_19127504;
 
+// create slangWord object
 public class slangWord {
     private String word;
     private String meaning;
-
 
     public slangWord(String word, String meaning){
         this.word = word;
@@ -21,7 +21,7 @@ public class slangWord {
     public String toString(){
         String result = "";
         result += "Word: " + word + "\n";
-        result += "Meaning: " + meaning.toString() + "\n";
+        result += "Meaning: " + meaning + "\n";
 
         return result;
     }

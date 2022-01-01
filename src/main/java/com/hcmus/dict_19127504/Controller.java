@@ -1,5 +1,6 @@
 package com.hcmus.dict_19127504;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -85,9 +86,6 @@ public class Controller implements Initializable {
     private Label random1SlangWordMeaningLabel;
 
     @FXML
-    private Button random1SlangWordBtn;
-
-    @FXML
     private Label quizSlangWordLabel;
 
     @FXML
@@ -131,10 +129,13 @@ public class Controller implements Initializable {
     private ObservableList<history> listHistory = FXCollections.observableArrayList();
 
     public Controller() throws FileNotFoundException {
+
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        resetBtn.setStyle("-fx-background-color: #ff0000");
+        resetBtn.setTextFill(Color.WHITE);
         searchSlangWordBtn.setOnAction(event -> onClickSlangWordSearchBtn());
         meaningSeachBtn.setOnAction(event -> onClickDefinitionSearchBtn());
         addBtn.setOnAction(event -> onClickAddBtn());
@@ -142,13 +143,11 @@ public class Controller implements Initializable {
         resetBtn.setOnAction(event -> {
             try {
                 onClickResetBtn();
-                showDialog("Đã reset");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         });
         editBtn.setOnAction(event -> onClickEditBtn());
-        random1SlangWordBtn.setOnAction(event -> onClickRandom1SlangWordBtn());
         quizSlangWordRefreshBtn.setOnAction(event -> onClickQuizSlangWordRefreshBtn());
         quizDefinitionRefreshBtn.setOnAction(event -> onClickQuizDefinitionRefreshBtn());
         findSlangWordTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -161,15 +160,29 @@ public class Controller implements Initializable {
         quizDefineTab.setOnSelectionChanged(event -> isFresh = true);
         addSlangWordToTableView();
         addHistoryToTableView();
-        random1SlangWord();
         quizSlangWord();
         quizDefinition();
+        setColumn("Word", "Meaning");
+        random1SlangWord();
     }
 
+    // show dialog
+    private void showDialog(String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    // handle event when click search button
     private void onClickQuizDefinitionRefreshBtn() {
         quizDefinition();
     }
 
+    // quiz definition
     private void quizDefinition() {
         isFresh = true;
         resetBtn(_ABtn, _BBtn, _CBtn, _DBtn);
@@ -208,33 +221,53 @@ public class Controller implements Initializable {
 
     }
 
-
+    // handle event when click quiz slang word button
     private void onClickQuizSlangWordRefreshBtn() {
         quizSlangWord();
     }
 
-    private void onClickRandom1SlangWordBtn() {
-        random1SlangWord();
-    }
-
+    // handle slang word 1 day with 5 min
     private void random1SlangWord() {
-        Random random = new Random();
-        int index = random.nextInt(list.size());
-        random1SlangWordLabel.setText(list.get(index).getWord());
-        random1SlangWordLabel.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 60));
-        random1SlangWordMeaningLabel.setText(list.get(index).getMeaning());
-        random1SlangWordMeaningLabel.setWrapText(true);
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    Random random = new Random();
+                    int index = random.nextInt(list.size());
+                    slangWord slangWord = list.get(index);
+                    random1SlangWordLabel.setText(slangWord.getWord());
+                    random1SlangWordMeaningLabel.setText(slangWord.getMeaning());
+                });
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(task,  0, 5000*60);
     }
 
+    // handle event when click reset button
     private void onClickResetBtn() throws FileNotFoundException {
-        wordListInstance.reset();
-        addSlangWordToTableView();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
+        alert.setTitle("Reset");
+        alert.setHeaderText("Bạn có chắc chắn muốn reset?");
+        alert.setContentText("Nhấn OK để reset");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            wordListInstance.reset();
+            addSlangWordToTableView();
+            showDialog("Reset thành công");
+        } else {
+            return;
+        }
     }
 
+    // handle event when click add button
     private void onClickDeleteBtn() {
         deleteSlangWord();
     }
 
+    // delete slang word
     private void deleteSlangWord() {
         String slangWord = slangWordInput.getText().trim();
         String meaning = meaningInput.getText().trim();
@@ -248,7 +281,6 @@ public class Controller implements Initializable {
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
             alert.setTitle("Thông báo");
             alert.setHeaderText("Bạn có chắc chắn muốn xóa từ này không?");
-            alert.setContentText("Từ: " + slangWord + "\nNghĩa: " + meaning);
             ButtonType confirm = new ButtonType("Có", ButtonBar.ButtonData.OK_DONE);
             ButtonType cancel = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
             alert.getButtonTypes().setAll(confirm, cancel);
@@ -265,6 +297,8 @@ public class Controller implements Initializable {
         } else
             showDialog("Không tìm thấy từ");
     }
+
+    // handle event when click edit button
     private void onClickEditBtn() {
         Alert alert = new Alert(Alert.AlertType.NONE);
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -317,16 +351,7 @@ public class Controller implements Initializable {
         }
     }
 
-    private void showDialog(String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
-        alert.setTitle("Thông báo");
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
+    // handle event when click add button
     private void onClickAddBtn() {
         String slangWord = slangWordInput.getText().toUpperCase(Locale.ROOT).trim();
         String meaning = meaningInput.getText().trim();
@@ -343,6 +368,8 @@ public class Controller implements Initializable {
             if (!wordListInstance.checkMeaning(slangWord, meaning)) {
                 // show error
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
                 alert.setTitle("Thông báo");
                 alert.setHeaderText("Từ này đã tồn tại");
                 alert.setContentText("Bạn muốn ???");
@@ -373,38 +400,41 @@ public class Controller implements Initializable {
         }
     }
 
-    private void setColumn() {
-        wordColumnFind.setCellValueFactory(new PropertyValueFactory<>("word"));
-        meaningColumnFind.setCellValueFactory(new PropertyValueFactory<>("meaning"));
+    // set up table
+    private void setColumn(String col1, String col2) {
+        wordColumnFind.setCellValueFactory(new PropertyValueFactory<>(col1));
+        wordColumnFind.setStyle("-fx-font-size: 16px;");
+        meaningColumnFind.setCellValueFactory(new PropertyValueFactory<>(col2));
+        meaningColumnFind.setStyle("-fx-font-size: 16px;");
     }
 
+    // handle event when click find slangword button
     private void onClickSlangWordSearchBtn() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        setColumn();
+        setColumn("Word", "Meaning");
         listSearch.clear();
         String word = findInput.getText().trim();
         if (word.equals("")) {
             showDialog("Vui lòng nhập từ cần tìm");
             return;
         }
-        if (wordListInstance.findSlangWord(word) != null) {
-            for (String key : wordListInstance.findSlangWord(word).keySet()) {
-                for (String meaning : wordListInstance.getList().get(key)) {
-                    listSearch.add(new slangWord(key, meaning));
-                }
-            }
-        }
-        else {
+        ArrayList<String> listFindSlangWord = wordListInstance.findSlangWord(word);
+        if (listFindSlangWord.size() == 0) {
             showDialog("Không tìm thấy từ");
+            return;
+        }
+        for (String slangWordMeaning : listFindSlangWord) {
+            listSearch.add(new slangWord(word, slangWordMeaning));
         }
         findSlangWordTableView.setItems(listSearch);
         wordListInstance.addHistory(word.toUpperCase(Locale.ROOT), dtf.format(now));
         addHistoryToTableView();
     }
 
+    // handle event when click find meaning button
     private void onClickDefinitionSearchBtn() {
-        setColumn();
+        setColumn("Word", "Meaning");
         String definition = findInput.getText().trim();
         if (definition.equals("")) {
             showDialog("Vui lòng nhập nghĩa cần tìm");
@@ -424,9 +454,12 @@ public class Controller implements Initializable {
         findSlangWordTableView.setItems(listSearch);
     }
 
+    // handle event when click add button
     private void addSlangWordToTableView() {
         wordColumn.setCellValueFactory(new PropertyValueFactory<>("word"));
+        wordColumn.setStyle("-fx-font-size: 16px;");
         meaningColumn.setCellValueFactory(new PropertyValueFactory<>("meaning"));
+        meaningColumn.setStyle("-fx-font-size: 16px;");
         list.clear();
         for (String key : wordListInstance.getList().keySet()) {
             for (String meaning : wordListInstance.getList().get(key)) {
@@ -436,9 +469,12 @@ public class Controller implements Initializable {
         listSlangWord.setItems(list);
     }
 
+    // add history to table view
     private void addHistoryToTableView() {
         wordHistoryColumn.setCellValueFactory(new PropertyValueFactory<>("word"));
+        wordHistoryColumn.setStyle("-fx-font-size: 16px;");
         timeHistoryColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
+        timeHistoryColumn.setStyle("-fx-font-size: 16px;");
         listHistory.clear();
         if (wordListInstance.getHistory().size() > 0) {
             for (int i = wordListInstance.getHistory().size() - 1; i >= 0; i--) {
@@ -448,6 +484,17 @@ public class Controller implements Initializable {
         }
     }
 
+    // reset button
+    private void resetBtn(Button ABtn, Button BBtn, Button CBtn, Button DBtn) {
+        ABtn.setTextFill(Color.BLACK);
+        BBtn.setTextFill(Color.BLACK);
+        CBtn.setTextFill(Color.BLACK);
+        DBtn.setTextFill(Color.BLACK);
+        setDisableBtn(ABtn, BBtn, CBtn, DBtn, false);
+        setColorBtn(ABtn, BBtn, CBtn, DBtn);
+    }
+
+    // random word meaning
     private ArrayList<String> randomWordMeaning(int size) {
         ArrayList<String> list = new ArrayList<>();
         int random = (int) (Math.random() * size);
@@ -459,6 +506,64 @@ public class Controller implements Initializable {
         return list;
     }
 
+    // set right answer button
+    private void setRightAnswerBtn(Button btn) {
+        btn.setStyle("-fx-background-color: #00ff00");
+        btn.setDisable(false);
+    }
+
+    // set wrong answer button
+    private void setWrongAnswerBtn(Button btn) {
+        btn.setStyle("-fx-background-color: #ff0000");
+        btn.setTextFill(Color.WHITE);
+    }
+
+    // set disable button
+    private void setDisableBtn(Button ABtn, Button BBtn, Button CBtn, Button DBtn, boolean disable) {
+        ABtn.setDisable(disable);
+        BBtn.setDisable(disable);
+        CBtn.setDisable(disable);
+        DBtn.setDisable(disable);
+    }
+
+    // set color button
+    private void setColorBtn(Button ABtn, Button BBtn, Button CBtn, Button DBtn) {
+        // set style for button default color
+        ABtn.setStyle("-fx-background-color: #FFFFFF");
+        BBtn.setStyle("-fx-background-color: #FFFFFF");
+        CBtn.setStyle("-fx-background-color: #FFFFFF");
+        DBtn.setStyle("-fx-background-color: #FFFFFF");
+    }
+
+    // choose answer
+    private void chooseAnswer(Button ABtn, Button BBtn, Button CBtn, Button DBtn, String answer) {
+        ABtn.setOnAction(e -> {
+            if (isFresh) {
+                BBtn.setDisable(true);
+                CBtn.setDisable(true);
+                DBtn.setDisable(true);
+                if (ABtn.getText().equals(answer)) {
+                    setRightAnswerBtn(ABtn);
+                }
+                else {
+                    // set button is answer
+                    if (BBtn.getText().equals(answer)) {
+                        setRightAnswerBtn(BBtn);
+                    }
+                    else if (CBtn.getText().equals(answer)) {
+                        setRightAnswerBtn(CBtn);
+                    }
+                    else if (DBtn.getText().equals(answer)) {
+                        setRightAnswerBtn(DBtn);
+                    }
+                    setWrongAnswerBtn(ABtn);
+                }
+                isFresh = false;
+            }
+        });
+    }
+
+    // quiz slang word
     private void quizSlangWord() {
         isFresh = true;
         resetBtn(ABtn, BBtn, CBtn, DBtn);
@@ -487,65 +592,5 @@ public class Controller implements Initializable {
         chooseAnswer(BBtn, ABtn, CBtn, DBtn, meaning);
         chooseAnswer(CBtn, ABtn, BBtn, DBtn, meaning);
         chooseAnswer(DBtn, ABtn, BBtn, CBtn, meaning);
-    }
-
-    private void chooseAnswer(Button ABtn, Button BBtn, Button CBtn, Button DBtn, String answer) {
-        ABtn.setOnAction(e -> {
-            if (isFresh) {
-                BBtn.setDisable(true);
-                CBtn.setDisable(true);
-                DBtn.setDisable(true);
-                if (ABtn.getText().equals(answer)) {
-                    setRightAnswerBtn(ABtn);
-                }
-                else {
-                    // set button is answer
-                    if (BBtn.getText().equals(answer)) {
-                        setRightAnswerBtn(BBtn);
-                    }
-                    else if (CBtn.getText().equals(answer)) {
-                        setRightAnswerBtn(CBtn);
-                    }
-                    else if (DBtn.getText().equals(answer)) {
-                        setRightAnswerBtn(DBtn);
-                    }
-                    setWrongAnswerBtn(ABtn);
-                }
-                isFresh = false;
-            }
-        });
-    }
-    private void resetBtn(Button ABtn, Button BBtn, Button CBtn, Button DBtn) {
-        ABtn.setTextFill(Color.BLACK);
-        BBtn.setTextFill(Color.BLACK);
-        CBtn.setTextFill(Color.BLACK);
-        DBtn.setTextFill(Color.BLACK);
-        setDisableBtn(ABtn, BBtn, CBtn, DBtn, false);
-        setColorBtn(ABtn, BBtn, CBtn, DBtn);
-    }
-
-    private void setRightAnswerBtn(Button btn) {
-        btn.setStyle("-fx-background-color: #00ff00");
-        btn.setDisable(false);
-    }
-
-    private void setWrongAnswerBtn(Button btn) {
-        btn.setStyle("-fx-background-color: #ff0000");
-        btn.setTextFill(Color.WHITE);
-    }
-
-    private void setDisableBtn(Button ABtn, Button BBtn, Button CBtn, Button DBtn, boolean disable) {
-        ABtn.setDisable(disable);
-        BBtn.setDisable(disable);
-        CBtn.setDisable(disable);
-        DBtn.setDisable(disable);
-    }
-
-    private void setColorBtn(Button ABtn, Button BBtn, Button CBtn, Button DBtn) {
-        // set style for button default color
-        ABtn.setStyle("-fx-background-color: #FFFFFF");
-        BBtn.setStyle("-fx-background-color: #FFFFFF");
-        CBtn.setStyle("-fx-background-color: #FFFFFF");
-        DBtn.setStyle("-fx-background-color: #FFFFFF");
     }
 }

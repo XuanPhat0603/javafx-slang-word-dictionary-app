@@ -1,5 +1,6 @@
 package com.hcmus.dict_19127504;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -14,6 +15,11 @@ public class Application extends javafx.application.Application {
         stage.setScene(scene);
         stage.getIcons().add(new javafx.scene.image.Image(Application.class.getResourceAsStream("/icons/icon.png")));
         stage.show();
+        // hadle close event
+        stage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
     public static void main(String[] args) {
