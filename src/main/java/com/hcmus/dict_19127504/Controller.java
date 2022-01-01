@@ -419,12 +419,13 @@ public class Controller implements Initializable {
             showDialog("Vui lòng nhập từ cần tìm");
             return;
         }
-        ArrayList<String> listFindSlangWord = wordListInstance.findSlangWord(word);
-        if (listFindSlangWord.size() == 0) {
+        ArrayList<String> listFindSlangWord = wordListInstance.findSlangWord(word.toUpperCase(Locale.ROOT));
+        if (listFindSlangWord == null) {
             showDialog("Không tìm thấy từ");;
-        }
-        for (String slangWordMeaning : listFindSlangWord) {
-            listSearch.add(new slangWord(word, slangWordMeaning));
+        } else {
+            for (String slangWordMeaning : listFindSlangWord) {
+                listSearch.add(new slangWord(word.toUpperCase(Locale.ROOT), slangWordMeaning));
+            }
         }
         findSlangWordTableView.setItems(listSearch);
         wordListInstance.addHistory(word.toUpperCase(Locale.ROOT), dtf.format(now));
