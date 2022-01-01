@@ -421,8 +421,7 @@ public class Controller implements Initializable {
         }
         ArrayList<String> listFindSlangWord = wordListInstance.findSlangWord(word);
         if (listFindSlangWord.size() == 0) {
-            showDialog("Không tìm thấy từ");
-            return;
+            showDialog("Không tìm thấy từ");;
         }
         for (String slangWordMeaning : listFindSlangWord) {
             listSearch.add(new slangWord(word, slangWordMeaning));
