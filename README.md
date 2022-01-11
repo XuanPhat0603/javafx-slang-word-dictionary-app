@@ -1,6 +1,7 @@
-# SlangWord-Dictionary
+# SlangWord Dictionary
 ## Language
 Project using java language
 ## UI
-JAVA FX
+Using java FX
 ## [Video DEMO](https://www.youtube.com/watch?v=DTrabEYBihM)
+## Image 
