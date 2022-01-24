@@ -24,5 +24,4 @@ Using java FX
 - Nhìn nghĩa đoán từ
 
 ## Image
-
-### Nhìn nghĩa đoán từ
+![This is an image](/assets/image/history.png)
