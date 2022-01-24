@@ -25,4 +25,8 @@ Using java FX
 
 ## Image
 
-### Nhìn nghĩa đoán từ
+![](/images/history.png)
+![](/images/search.png)
+![](/image/view.png)
+![](/image/quiz1.png)
+![](/image/quiz2.png)
